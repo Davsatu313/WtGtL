@@ -1,0 +1,7 @@
+html, body { height: 100%; margin: 0; padding: 0; }
+
+#contenedor {height: 100%; width: 100%; background-color: white;}
+#upperTittle {height: 50px; width: 59%;float: left; background-color: #4d4dff}
+#weather {height:30px; width: 40%;font-size: 25px;font-family: serif; margin-left: 38%;margin-bottom: 100px;float: left; color:#FFFFFF;}
+#map { height: 99%; width: 40%; float: right; margin-top: 5px;margin-right: 5px  }
+#wet{ height:30px; width: 30px ;font-size: 25px;font-family: serif;color:#000000; display: inline;margin-left:5px}
