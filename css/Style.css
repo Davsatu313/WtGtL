@@ -10,4 +10,4 @@ html, body { height: 100%; margin: 0; padding: 0; }
 
 #wet{ color:white; float: right;}
 
-#mitad{ height: 100%; width: 40%;position: fixed; background-color: rgba(115, 115, 115, .8); z-index: 2; border-right: 5px;}
+#mitad{ height: 100%; width: 40%;position: fixed; background-color: rgba(115, 115, 115, .8); z-index: 2; border-right: 5px; border-color: #363738 ;filter: blur(3px);}
