@@ -32,3 +32,24 @@ div.menu:hover p.text{ padding-top: 6em; transition: 1s; opacity: 1;}
 div.Informacion{margin-left: 10%;margin-top: 25%;background-color: rgba(16, 16, 17,.5);height: 70%; width: 80%;position: absolute;color: white;}
 
 p.inf{display: block;margin-top:3%;margin-left: 3%; font-family: sans-serif;}
+
+
+
+svg {
+	width: 80%;
+	height: 80%;
+  float: center;
+  margin-top: 10%;
+  margin-left: 10%
+}
+
+path.slice{
+	stroke-width:2px;
+}
+
+polyline{
+	opacity: .3;
+	stroke: black;
+	stroke-width: 2px;
+	fill: none;
+}

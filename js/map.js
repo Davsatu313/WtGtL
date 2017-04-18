@@ -183,6 +183,78 @@ var xmlhttp = new XMLHttpRequest();
        }
        datosLimpios.push(linea);
      };
+//chart
+var svg = d3.select(".Informacion")
+	.append("svg")
+	.append("g")
+
+svg.append("g")
+	.attr("class", "slices");
+svg.append("g")
+	.attr("class", "labels");
+svg.append("g")
+	.attr("class", "lines");
+
+var width = 400,
+    height = 400,
+	radius = Math.min(width, height) / 2;
+
+var pie = d3.layout.pie()
+	.sort(null)
+	.value(function(d) {
+		return d.value;
+	});
+
+var arc = d3.svg.arc()
+	.outerRadius(radius * 0.8)
+	.innerRadius(radius * 0.4);
+
+var outerArc = d3.svg.arc()
+	.innerRadius(radius * 0.9)
+	.outerRadius(radius * 0.9);
+
+svg.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+var key = function(d){ return d.data.label; };
+
+var color = d3.scale.ordinal()
+	.domain(["CONFORTABLE","SIZE","PRICE","RATE","DISTANCE"])
+	.range(["#2D4059", "#622569", "#E84545", "#F07B3F", "#FF9A00"]);
+
+function randomData (){
+	var labels = color.domain();
+	return labels.map(function(label){
+		return { label: label, value: Math.random() }
+	});
+}
+//Keep chart
+function change(data) {
+
+/* ------- PIE SLICES -------*/
+var slice = svg.select(".slices").selectAll("path.slice")
+.data(pie(data), key);
+
+slice.enter()
+.insert("path")
+.style("fill", function(d) { return color(d.data.label); })
+.attr("class", "slice");
+
+slice
+.transition().duration(1000)
+.attrTween("d", function(d) {
+this._current = this._current || d;
+var interpolate = d3.interpolate(this._current, d);
+this._current = interpolate(0);
+return function(t) {
+return arc(interpolate(t));
+};
+})
+
+slice.exit()
+.remove();
+
+
+};
 
 //Draw markers
      var rnd;
@@ -206,7 +278,7 @@ var xmlhttp = new XMLHttpRequest();
                                             $("#inf2").text(str2+":   "+datosLimpios[rnd][4]);
                                             $("#inf3").text(str3+":   "+datosLimpios[rnd][5]);
                                             $("#inf4").text(str4+":   "+datosLimpios[rnd][6]);
-
+                                            change(randomData());
                                           });
 
         }//ok map
