@@ -2,6 +2,7 @@ var map;
 var datosLimpios = [];
 var xd =['assets/college.png','assets/rent.png','assets/food.png','assets/fun.png','assets/study.png']
 var markers = []
+var elevator;
 //create and draw the map in the mash-up
 function initMap() {
   var uluru = {lat: 41.8708, lng: -87.6505};
@@ -40,25 +41,14 @@ var xmlhttp = new XMLHttpRequest();
     var longitudeJson = 20;
     var adressJson = 12;
     var posIcon = 1;
-    var infr1,infr2,infr3,infr4;
-    var str1,str2,str3,str4;
     //Create a new function that will get te dataset selected by the user
     $(function(){
       $("#home").click(function(){
-        console.log("HOME");
         lookingdata=0;
         latitudeJson = 19;
         longitudeJson = 20;
         adressJson = 12;
         posIcon = 1;
-        str1="  Comunity area";
-        infr1 = 8;
-        str2="  ZIP CODE";
-        infr2 = 13;
-        str3="  MANAGEMENT COMPANY";
-        infr3 = 15;
-        str4= " ADRESS";
-        infr4 = 12;
         xmlhttp.open("GET", url[lookingdata], true);
         xmlhttp.send();
       });
@@ -69,14 +59,6 @@ var xmlhttp = new XMLHttpRequest();
         longitudeJson = 19;
         adressJson = 8;
         posIcon = 2;
-        str1="  OPEN";
-        infr1 = 11;
-        str2="  CLOSE";
-        infr2 = 12;
-        str3="  LOCATION";
-        infr3 = 8;
-        str4="  TYPE";
-        infr4 = 16;
         xmlhttp.open("GET", url[lookingdata], true);
         xmlhttp.send();
       });
@@ -87,14 +69,6 @@ var xmlhttp = new XMLHttpRequest();
         longitudeJson = 12;
         adressJson = 10;
         posIcon = 3;
-        str1="  PARK";
-        infr1 = 8;
-        str2="  NAME";
-        infr2 = 10;
-        str3="  ARTIST";
-        infr3 = 14;
-        str4="  OWNER";
-        infr4 = 15;
         xmlhttp.open("GET", url[lookingdata], true);
         xmlhttp.send();
       });
@@ -105,21 +79,15 @@ var xmlhttp = new XMLHttpRequest();
         longitudeJson = 18;
         adressJson = 12;
         posIcon = 4;
-        str1="  HOURS OF OPERAION";
-        infr1 = 9;
-        str2="  CYBERNAVIGATION";
-        infr2 = 10;
-        str3="  TEACHER";
-        infr3 = 11;
-        str4="  ADRESS";
-        infr4 = 12;
         xmlhttp.open("GET", url[lookingdata], true);
         xmlhttp.send();
       });
-    });//end of click function
 
 
 
+
+
+    });
 
 
   /*Once my request be ready let's work with the data*/
@@ -134,6 +102,7 @@ var xmlhttp = new XMLHttpRequest();
     //clear all markers
       for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
+            console.log("lol");
           }
 
     //clear all the data arrays
@@ -142,11 +111,6 @@ var xmlhttp = new XMLHttpRequest();
        markers = [];
        console.log("LIMPIO TODO");
      }
-
-     function getRandom(max) {
-       return Math.floor(Math.random() * (max - 2)) + 3;
-      }
-
 
      for (var i= 0; i<json.data.length;i++){
        var linea = [];
@@ -157,14 +121,7 @@ var xmlhttp = new XMLHttpRequest();
        linea.push(json.data[i][longitudeJson][2]);
        // adress - 2
        linea.push(json.data[i][adressJson]);
-       //1 -3
-       linea.push(json.data[i][infr1]);
-       //2 -4
-       linea.push(json.data[i][infr2]);
-       //3 -5
-       linea.push(json.data[i][infr3]);
-       //4 -6
-       linea.push(json.data[i][infr4]);
+
        }else{
        //latitude - 0
        linea.push(json.data[i][latitudeJson]);
@@ -172,44 +129,97 @@ var xmlhttp = new XMLHttpRequest();
        linea.push(json.data[i][longitudeJson]);
        // adress - 2
        linea.push(json.data[i][adressJson]);
-       //1 -3
-       linea.push(json.data[i][infr1]);
-       //2 -4
-       linea.push(json.data[i][infr2]);
-       //3 -5
-       linea.push(json.data[i][infr3]);
-       //4 -6
-       linea.push(json.data[i][infr4]);
        }
        datosLimpios.push(linea);
      };
 
 //Draw markers
-     var rnd;
-     for(var i=0; i < datosLimpios.length;i++){
+//add markers on the map
+            // var markers = [];
+            // Create an ElevationService
 
-            var marker =    new google.maps.Marker({
-                            icon:xd[posIcon] ,
-                            position: {lat: Number(datosLimpios[i][0]), lng: Number(datosLimpios[i][1])},
-                            map: map,
-                            title: datosLimpios[i][2]
-                        });
-                        markers.push(marker)
+            elevator = new google.maps.ElevationService();
+            $.each(markers, function(key, value)
+            {
+                value.setMap(null);
+            });
+            // getting bounds of current location
+            var boundBox = map.getBounds();
+            var southWest = boundBox.getSouthWest();
+            var northEast = boundBox.getNorthEast();
+            var lngSpan = northEast.lng() - southWest.lng();
+            var latSpan = northEast.lat() - southWest.lat();
+            // adding  markers to the map at random locations
+            var locations = [];
+            for (var j = 0; j < markers.length; j++)
+            {
+                var location = new google.maps.LatLng(
+                        southWest.lat() + latSpan * Math.random(),
+                        southWest.lng() + lngSpan * Math.random()
+                        );
+                locations.push(location);
+            }
 
-                        google.maps.event.addListener(markers[i], 'click', function(){
-                                            //clean data
-                                            $(".inf").empty();
-                                            rnd = getRandom(markers.length);
-                                            var clean = datosLimpios[rnd][0];
-                                            // console.log(rnd);
-                                            $("#inf1").text(str1+":   "+datosLimpios[rnd][3]);
-                                            $("#inf2").text(str2+":   "+datosLimpios[rnd][4]);
-                                            $("#inf3").text(str3+":   "+datosLimpios[rnd][5]);
-                                            $("#inf4").text(str4+":   "+datosLimpios[rnd][6]);
+            // Create a LocationElevationRequest object using the array's one value
+            var positionalRequest = {
+                'locations': locations
+            };
 
-                                          });
+            elevator.getElevationForLocations(positionalRequest, function(results, status){
 
-        }//ok map
+              console.log("HOLIq");
+              console.log(status);
+               if (status === google.maps.ElevationStatus.OK){
+                 console.log("HOLI2");
+
+                   $.each(results, function(key, value) {
+                     console.log("HOLI3");
+                     console.log(key);
+                          markers[key] = new google.maps.Marker({
+                                icon:xd[posIcon],
+                                position: {lat: Number(datosLimpios[key][0]), lng: Number(datosLimpios[key][1])},
+                                map: map,
+                                title: datosLimpios[i][2]
+                              });//marker create
+
+                   });
+
+
+
+              }
+            }); //fin elevator
+
+
+
+
+
+///
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //  for(var i=0; i < datosLimpios.length;i++){
+    //         var marker =    new google.maps.Marker({
+    //                         icon:xd[posIcon] ,
+    //                         position: {lat: Number(datosLimpios[i][0]), lng: Number(datosLimpios[i][1])},
+    //                         map: map,
+    //                         title: datosLimpios[i][2]
+    //                     });
+    //                     markers.push(marker)
+     //
+    //                     google.maps.event.addListener(markers[i], 'click', function(){
+    //                                         //if another window is open, close it
+    //                                         console.log(  datosLimpios[i][2]  );
+    //                                       });
 
    }
 }

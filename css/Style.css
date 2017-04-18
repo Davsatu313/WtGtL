@@ -23,11 +23,12 @@ div#study{background-color: rgb(233,147,26);}
 div#fun{background-color: rgb(22,107,162);}
 div#food{background-color: rgb(27,54,71);}
 
-p.text{ font-size: 1.3em;text-align: center; color: white; padding-top: 4.5em;opacity: 0.6;}
+p.text{ font-size: 1.3em;text-align: center; color: white; padding-top: 4.5em;opacity: 0.5;}
 
-div.menu:hover{
-  height: 17%;
-  transition: 1s;
-}
+div.menu:hover{height: 17%; transition: 1s;}
 
-div.menu:hover p.text{ padding-top: 5.5em; transition: 1s;}
+div.menu:hover p.text{ padding-top: 6em; transition: 1s; opacity: 1;}
+
+div.Informacion{margin-left: 10%;margin-top: 25%;background-color: rgba(16, 16, 17,.5);height: 70%; width: 80%;position: absolute;color: white;}
+
+p.inf{display: block;margin-top:3%;margin-left: 3%; font-family: sans-serif;}
