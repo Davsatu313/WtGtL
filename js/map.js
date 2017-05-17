@@ -1,5 +1,4 @@
 var map;
-
 var datosLimpios = [];
 var xd =['assets/college.png','assets/rent.png','assets/food.png','assets/fun.png','assets/study.png']
 var markers = []
